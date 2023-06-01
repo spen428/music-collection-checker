@@ -15,4 +15,4 @@ class UndesirableFileTypeChecker(BaseChecker):
 
         undesirable_files = [filename for filename in files if not self.regex.match(filename)]
         for filename in undesirable_files:
-            self._log_error(current_path + '/' + filename)
+            self._log_issue(current_path + '/' + filename)

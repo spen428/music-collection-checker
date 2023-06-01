@@ -18,4 +18,4 @@ class BadFileNameChecker(BaseChecker):
                 continue
             if self.cover_regex.match(filename):
                 continue
-            self._log_error(current_path + '/' + filename)
+            self._log_issue(current_path + '/' + filename)

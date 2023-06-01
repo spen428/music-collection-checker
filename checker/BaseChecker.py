@@ -4,20 +4,20 @@ from typing import List, Iterator
 
 class BaseChecker(object):
     name: str
-    _items: List[str]
+    _issues: List[str]
 
     def __init__(self, name: str, work_dir: str):
         self.name = name
         self.work_dir = work_dir
         self.work_dir_len: int = len(work_dir)
-        self._items = []
+        self._issues = []
 
-    def _log_error(self, item: str):
+    def _log_issue(self, file_path: str):
         num_chars_to_skip = self.work_dir_len + 1
-        self._items.append(item[num_chars_to_skip:])
+        self._issues.append(file_path[num_chars_to_skip:])
 
     def issues(self) -> Iterator[str]:
-        return iter(self._items)
+        return iter(self._issues)
 
     def check(self):
         self._pre_check()
@@ -26,11 +26,11 @@ class BaseChecker(object):
             self._check(current_path, dirs, files, depth)
         self._post_check()
 
-    def _check(self, current_path: str, dirs: list, files: list, depth: int):
-        raise NotImplementedError
-
     def _pre_check(self):
         pass
+
+    def _check(self, current_path: str, dirs: list, files: list, depth: int):
+        raise NotImplementedError
 
     def _post_check(self):
         pass

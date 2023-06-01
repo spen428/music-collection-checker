@@ -15,4 +15,4 @@ class MissingCoverArtChecker(BaseChecker):
 
         cover_art_files = [self.regex.match(filename) for filename in files]
         if not any(cover_art_files):
-            self._log_error(current_path + '/')
+            self._log_issue(current_path + '/')

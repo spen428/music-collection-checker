@@ -7,13 +7,13 @@ from checker import BaseChecker, EmptyDirChecker, MissingCoverArtChecker, BadDir
 
 
 def check(checker: BaseChecker):
-    # yn = input(f"Execute '{checker.name}' check? [Yn]") or 'y'
-    # if yn.lower() == 'n':
-    #     return
-    # if yn.lower() != 'y':
-    #     print("Please answer [Y]es or [N]o.")
-    #     check(checker)
-    #     return
+    yn = input(f"Execute '{checker.name}' check? [Yn]") or 'y'
+    if yn.lower() == 'n':
+        return
+    if yn.lower() != 'y':
+        print("Please answer [Y]es or [N]o.")
+        check(checker)
+        return
 
     checker.check()
 

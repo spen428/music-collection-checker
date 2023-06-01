@@ -16,4 +16,4 @@ class MixedFileTypeChecker(BaseChecker):
 
         file_extensions = set([os.path.splitext(f)[-1] for f in files])
         if len(file_extensions) > 2:
-            self._log_error(f"{current_path}/  ({','.join(file_extensions)})")
+            self._log_issue(f"{current_path}/  ({','.join(file_extensions)})")

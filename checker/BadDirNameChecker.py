@@ -15,4 +15,4 @@ class BadDirNameChecker(BaseChecker):
             return
         basename = os.path.basename(current_path)
         if not self.regex.match(basename):
-            self._log_error(current_path + '/')
+            self._log_issue(current_path + '/')

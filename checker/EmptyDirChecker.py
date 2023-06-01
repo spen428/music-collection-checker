@@ -7,4 +7,4 @@ class EmptyDirChecker(BaseChecker):
 
     def _check(self, current_path: str, dirs: list, files: list, depth: int):
         if len(dirs) == 0 and len(files) == 0:
-            self._log_error(current_path + '/')
+            self._log_issue(current_path + '/')
