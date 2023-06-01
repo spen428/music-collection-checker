@@ -1,7 +1,7 @@
 import os.path
 import re
 
-from checker.BaseChecker import BaseChecker
+from checker import BaseChecker
 
 
 class BadDirNameChecker(BaseChecker):

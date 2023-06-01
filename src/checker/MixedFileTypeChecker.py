@@ -1,7 +1,7 @@
 import os.path
 from typing import Set
 
-from checker.BaseChecker import BaseChecker
+from checker import BaseChecker
 
 
 class MixedFileTypeChecker(BaseChecker):

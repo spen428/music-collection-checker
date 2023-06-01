@@ -1,4 +1,4 @@
-from checker.BaseChecker import BaseChecker
+from checker import BaseChecker
 
 
 class EmptyDirChecker(BaseChecker):

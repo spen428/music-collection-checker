@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-import os
-from typing import List
-
-from checker import BaseChecker, EmptyDirChecker, MissingCoverArtChecker, BadDirNameChecker, UndesirableFileTypeChecker, \
-    MixedFileTypeChecker, BadFileNameChecker
+from checker import *
 
 
-def check(checker: BaseChecker):
+def _check(checker: BaseChecker):
     yn = input(f"Execute '{checker.name}' check? [Yn]") or 'y'
     if yn.lower() == 'n':
         return
     if yn.lower() != 'y':
         print("Please answer [Y]es or [N]o.")
-        check(checker)
+        _check(checker)
         return
 
     checker.check()
@@ -33,7 +29,7 @@ def check(checker: BaseChecker):
 
 
 def run(work_dir: str):
-    checkers: List[BaseChecker] = [
+    checkers: List[_BaseChecker] = [
         EmptyDirChecker(work_dir),
         MissingCoverArtChecker(work_dir),
         BadDirNameChecker(work_dir),
@@ -45,7 +41,7 @@ def run(work_dir: str):
     print("Checking music collection for issues...")
 
     for checker in checkers:
-        check(checker)
+        _check(checker)
 
     print("Done")
     print("Please review and action any issues listed above.")
