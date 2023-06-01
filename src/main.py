@@ -29,7 +29,7 @@ def _check(checker: BaseChecker):
 
 
 def run(work_dir: str):
-    checkers: List[_BaseChecker] = [
+    checkers: List[BaseChecker] = [
         EmptyDirChecker(work_dir),
         MissingCoverArtChecker(work_dir),
         BadDirNameChecker(work_dir),

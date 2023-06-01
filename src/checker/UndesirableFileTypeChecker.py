@@ -1,6 +1,6 @@
 import re
 
-from checker import BaseChecker
+from . import BaseChecker
 
 
 class UndesirableFileTypeChecker(BaseChecker):
