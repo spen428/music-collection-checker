@@ -10,7 +10,7 @@ class MixedFileTypeChecker(BaseChecker):
     def __init__(self, work_dir: str):
         super().__init__('Mixed file types', work_dir)
 
-    def _check(self, current_path: str, dirs: list, files: list):
+    def _check(self, current_path: str, dirs: list, files: list, depth: int):
         if len(files) == 0:
             return
 

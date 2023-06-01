@@ -10,8 +10,7 @@ class BadDirNameChecker(BaseChecker):
 
     regex = re.compile(r"^\[\d{4}-\d{2}-\d{2}] .+$")
 
-    def _check(self, current_path: str, dirs: list, files: list):
-        depth = len(current_path[self.work_dir_len:].split('/'))
+    def _check(self, current_path: str, dirs: list, files: list, depth: int):
         if depth < 3:
             return
         basename = os.path.basename(current_path)

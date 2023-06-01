@@ -9,7 +9,7 @@ class MissingCoverArtChecker(BaseChecker):
 
     regex = re.compile(r"cover\.(jpg|png)")
 
-    def _check(self, current_path: str, dirs: list, files: list):
+    def _check(self, current_path: str, dirs: list, files: list, depth: int):
         if len(files) == 0:
             return
 

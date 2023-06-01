@@ -22,10 +22,11 @@ class BaseChecker(object):
     def check(self):
         self._pre_check()
         for current_path, dirs, files in os.walk(self.work_dir):
-            self._check(current_path, dirs, files)
+            depth = len(current_path[self.work_dir_len:].split('/'))
+            self._check(current_path, dirs, files, depth)
         self._post_check()
 
-    def _check(self, current_path: str, dirs: list, files: list):
+    def _check(self, current_path: str, dirs: list, files: list, depth: int):
         raise NotImplementedError
 
     def _pre_check(self):
