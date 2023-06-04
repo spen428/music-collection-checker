@@ -22,6 +22,8 @@ class BaseChecker(object):
     def check(self):
         self._pre_check()
         for current_path, dirs, files in os.walk(self.work_dir):
+            if self._should_skip(current_path, dirs, files):
+                continue
             depth = len(current_path[self.work_dir_len:].split('/'))
             self._check(current_path, dirs, files, depth)
         self._post_check()
@@ -34,3 +36,6 @@ class BaseChecker(object):
 
     def _post_check(self):
         pass
+
+    def _should_skip(self, current_path: str, dirs: list, files: list) -> bool:
+        return current_path.startswith(self.work_dir + '/Unsorted Music')
