@@ -1,4 +1,3 @@
-import os.path
 from typing import Set
 
 from . import BaseChecker
@@ -14,6 +13,6 @@ class MixedFileTypeChecker(BaseChecker):
         if len(files) == 0:
             return
 
-        file_extensions = set([os.path.splitext(f)[-1] for f in files])
+        file_extensions = set([filename.split('.')[-1] for filename in files])
         if len(file_extensions) > 2:
             self._log_issue(f"{current_path}/  ({','.join(file_extensions)})")
