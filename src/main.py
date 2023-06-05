@@ -2,15 +2,18 @@
 from checker import *
 
 
-def _check(checker: BaseChecker):
-    yn = input(f"Execute '{checker.name}' check? [Yn]") or 'y'
+def _confirm(prompt: str) -> bool:
+    yn = input(prompt) or 'y'
     if yn.lower() == 'n':
-        return
-    if yn.lower() != 'y':
-        print("Please answer [Y]es or [N]o.")
-        _check(checker)
-        return
+        return False
+    if yn.lower() == 'y':
+        return True
 
+    print("Please answer [Y]es or [N]o.")
+    return _confirm(prompt)
+
+
+def _check(checker: BaseChecker):
     checker.check()
 
     print("========================================")
@@ -28,7 +31,7 @@ def _check(checker: BaseChecker):
     print("")
 
 
-def run(work_dir: str):
+def run(work_dir: str, require_confirmation: bool):
     checkers: List[BaseChecker] = [
         EmptyDirChecker(work_dir),
         MissingCoverArtChecker(work_dir),
@@ -41,7 +44,8 @@ def run(work_dir: str):
     print("Checking music collection for issues...")
 
     for checker in checkers:
-        _check(checker)
+        if not require_confirmation or _confirm(f"Execute '{checker.name}' check? [Yn]"):
+            _check(checker)
 
     print("Done")
     print("Please review and action any issues listed above.")
@@ -49,4 +53,4 @@ def run(work_dir: str):
 
 if __name__ == '__main__':
     music_dir = os.path.join(os.path.expanduser("~"), "Music")
-    run(music_dir)
+    run(music_dir, False)

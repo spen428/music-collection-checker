@@ -38,4 +38,5 @@ class BaseChecker(object):
         pass
 
     def _should_skip(self, current_path: str, dirs: list, files: list) -> bool:
-        return current_path.startswith(self.work_dir + '/Unsorted Music')
+        return current_path.startswith(self.work_dir + '/Unsorted Music') \
+            or current_path.startswith(self.work_dir + '/.config')
