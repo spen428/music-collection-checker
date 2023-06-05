@@ -8,11 +8,12 @@ class BaseChecker(object):
 
     def __init__(self, name: str, work_dir: str):
         self.name = name
-        self.work_dir = work_dir
-        self.work_dir_len: int = len(work_dir)
+        self.work_dir = os.path.normpath(work_dir)
+        self.work_dir_len: int = len(self.work_dir)
         self._issues = []
 
     def _log_issue(self, file_path: str):
+        file_path = os.path.normpath(file_path)
         num_chars_to_skip = self.work_dir_len + 1
         self._issues.append(file_path[num_chars_to_skip:])
 
@@ -21,11 +22,17 @@ class BaseChecker(object):
 
     def check(self):
         self._pre_check()
+
         for current_path, dirs, files in os.walk(self.work_dir):
+            current_path = os.path.normpath(current_path)
+
             if self._should_skip(current_path, dirs, files):
                 continue
+
             depth = len(current_path[self.work_dir_len:].split('/'))
+
             self._check(current_path, dirs, files, depth)
+
         self._post_check()
 
     def _pre_check(self):
