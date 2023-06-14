@@ -4,10 +4,10 @@ from checker import WalkItem
 
 
 def string_to_walk_iterator(string: str) -> Iterator[WalkItem]:
-    return iter(string_to_walk_list(string))
+    return iter(string_to_filesystem(string))
 
 
-def string_to_walk_list(string: str) -> List[WalkItem]:
+def string_to_filesystem(string: str) -> List[WalkItem]:
     exploded_filepaths = [x.rsplit('/', 2) for x in sorted(string.strip().splitlines())]
     tree: Dict[str, Dict[str, List[str]]] = dict()
     for filepath_segments in exploded_filepaths:
@@ -36,7 +36,7 @@ def string_to_walk_list(string: str) -> List[WalkItem]:
 def _tree_to_list(tree_dict) -> List[WalkItem]:
     nodes = []
     for key in tree_dict:
-        files = sorted(tree_dict[key]["files"])
+        files = sorted(tree_dict[key].get("files", []))
         dirs = sorted(tree_dict[key]["dirs"])
         node = (key, dirs, files)
         nodes.append(node)

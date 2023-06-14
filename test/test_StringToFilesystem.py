@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from StringToFilesystem import string_to_walk_list
+from StringToFilesystem import string_to_filesystem
 
 
 def deeply_sorted(nested_list):
@@ -31,7 +31,7 @@ class StringToFileSystemTests(TestCase):
         actual = deeply_sorted(os.walk(path))
         self.assertEqual([(path, [], [])], actual)
 
-    def test_string_to_walk_list(self):
+    def test_string_to_filesystem(self):
         string = """
 res/os_walk_test/.config/
 res/os_walk_test/.config/evolution/
@@ -48,4 +48,4 @@ res/os_walk_test/.config/evolution/mail/state.ini
 res/os_walk_test/.config/evolution/mail/folders/
 res/os_walk_test/.emacs
 """
-        self.assertEqual(self.expected, string_to_walk_list(string))
+        self.assertEqual(self.expected, string_to_filesystem(string))
