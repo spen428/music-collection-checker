@@ -37,12 +37,6 @@ def string_to_walk_list(string: str) -> List[WalkItem]:
         node = (key, dirs, files)
         nodes.append(node)
 
-    print('OUTPUT:')
-    print('[')
-    for node in nodes:
-        print(f'  {node}')
-    print(']')
-
     return nodes
 
 
