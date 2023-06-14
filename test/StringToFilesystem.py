@@ -14,15 +14,12 @@ def string_to_walk_list(string: str) -> List[WalkItem]:
         root = item[0]
         middle = item[1]
 
-        tree_dict.setdefault(root, {})
-        tree_dict[root].setdefault('files', [])
-        tree_dict[root].setdefault('dirs', [])
-
         if len(item) == 2 and middle == '':
             continue
 
         leaf = item[2]
         if leaf == '':
+            tree_dict.setdefault(root, {})
             tree_dict[root].setdefault('dirs', [])
             tree_dict[root]['dirs'].append(middle)
 
