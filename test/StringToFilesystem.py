@@ -8,7 +8,7 @@ def string_to_walk_iterator(string: str) -> Iterator[WalkItem]:
 
 
 def string_to_walk_list(string: str) -> List[WalkItem]:
-    tree = [x.rsplit('/', 2) for x in sorted(string.splitlines())]
+    tree = [x.rsplit('/', 2) for x in sorted(string.strip().splitlines())]
     tree_dict = {}
     for item in tree:
         root = item[0]
