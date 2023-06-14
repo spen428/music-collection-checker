@@ -1,4 +1,4 @@
-from typing import Iterator, List
+from typing import Iterator, List, Dict
 
 from checker import WalkItem
 
@@ -8,53 +8,36 @@ def string_to_walk_iterator(string: str) -> Iterator[WalkItem]:
 
 
 def string_to_walk_list(string: str) -> List[WalkItem]:
-    tree = [x.rsplit('/', 2) for x in sorted(string.strip().splitlines())]
-    tree_dict = {}
-    for item in tree:
-        root = item[0]
-        middle = item[1]
+    exploded_filepaths = [x.rsplit('/', 2) for x in sorted(string.strip().splitlines())]
+    tree: Dict[str, Dict[str, List[str]]] = dict()
+    for filepath_segments in exploded_filepaths:
+        root = filepath_segments[0]
+        middle = filepath_segments[1]
 
-        if len(item) == 2 and middle == '':
+        if len(filepath_segments) == 2 and middle == '':
             continue
 
-        leaf = item[2]
+        leaf = filepath_segments[2]
         if leaf == '':
-            tree_dict.setdefault(root, {})
-            tree_dict[root].setdefault('dirs', [])
-            tree_dict[root]['dirs'].append(middle)
+            tree.setdefault(root, {})
+            tree[root].setdefault('dirs', [])
+            tree[root]['dirs'].append(middle)
 
-        root += f'/{middle}'
-        tree_dict.setdefault(root, {})
-        tree_dict[root].setdefault('files', [])
-        tree_dict[root].setdefault('dirs', [])
+        subdir = f'{root}/{middle}'
+        tree.setdefault(subdir, {})
+        tree[subdir].setdefault('files', [])
+        tree[subdir].setdefault('dirs', [])
         if leaf != '':
-            tree_dict[root]['files'].append(leaf)
+            tree[subdir]['files'].append(leaf)
 
-    nodes: List[WalkItem] = []
+    return _tree_to_list(tree)
+
+
+def _tree_to_list(tree_dict) -> List[WalkItem]:
+    nodes = []
     for key in tree_dict:
         files = sorted(tree_dict[key]["files"])
         dirs = sorted(tree_dict[key]["dirs"])
         node = (key, dirs, files)
         nodes.append(node)
-
     return nodes
-
-
-def remove_from_tree(tree, node):
-    (root, dirs, files) = node
-    for x in dirs:
-        tree.remove([root, x, ''])
-    for x in files:
-        tree.remove([root, *x])
-
-
-def recurse(file, children):
-    dirs = []
-    files = []
-    for x in children:
-        if x[2] == '':
-            dirs.append(x[1])
-        elif len(x) == 2:
-            files.append(x[1:])
-
-    return file[0], dirs, files
