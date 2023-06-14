@@ -1,11 +1,12 @@
 import re
+from typing import List
 
-from . import BaseChecker
+from . import BaseChecker, WalkItem
 
 
 class UndesirableFileTypeChecker(BaseChecker):
-    def __init__(self, work_dir: str):
-        super().__init__('Undesirable file types', work_dir)
+    def __init__(self, work_dir: str, walk: List[WalkItem]):
+        super().__init__('Undesirable file types', work_dir, walk)
 
     regex = re.compile(r".+\.(mp3|ogg|flac|ptsp|jpg|png)")
 

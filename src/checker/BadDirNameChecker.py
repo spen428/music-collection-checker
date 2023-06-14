@@ -1,12 +1,13 @@
 import os.path
 import re
+from typing import List
 
-from . import BaseChecker
+from . import BaseChecker, WalkItem
 
 
 class BadDirNameChecker(BaseChecker):
-    def __init__(self, work_dir: str):
-        super().__init__('Bad directory names', work_dir)
+    def __init__(self, work_dir: str, walk: List[WalkItem]):
+        super().__init__('Bad directory names', work_dir, walk)
 
     regex = re.compile(r"^\[\d{4}-\d{2}-\d{2}] .+$")
 

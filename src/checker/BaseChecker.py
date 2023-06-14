@@ -1,15 +1,20 @@
 import os
-from typing import List, Iterator
+from typing import List, Tuple, AnyStr, Iterator
+
+WalkItem = Tuple[AnyStr, List[AnyStr], List[AnyStr]]
+WalkTree = Iterator[WalkItem]
 
 
 class BaseChecker(object):
     name: str
     _issues: List[str]
+    _walk: List[WalkItem]
 
-    def __init__(self, name: str, work_dir: str):
+    def __init__(self, name: str, work_dir: str, walk: List[WalkItem] | Iterator[WalkItem]):
         self.name = name
         self.work_dir = os.path.normpath(work_dir)
         self.work_dir_len: int = len(self.work_dir)
+        self._walk = list(walk) if isinstance(walk, Iterator) else walk
         self._issues = []
 
     def _log_issue(self, file_path: str):
@@ -23,7 +28,7 @@ class BaseChecker(object):
     def check(self):
         self._pre_check()
 
-        for current_path, dirs, files in os.walk(self.work_dir):
+        for current_path, dirs, files in self._walk:
             current_path = os.path.normpath(current_path)
 
             if self._should_skip(current_path, dirs, files):

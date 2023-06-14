@@ -1,11 +1,12 @@
 import re
+from typing import List
 
-from . import BaseChecker
+from . import BaseChecker, WalkItem
 
 
 class MissingCoverArtChecker(BaseChecker):
-    def __init__(self, work_dir: str):
-        super().__init__('Missing cover art', work_dir)
+    def __init__(self, work_dir: str, walk: List[WalkItem]):
+        super().__init__('Missing cover art', work_dir, walk)
 
     regex = re.compile(r"cover\.(jpg|png)")
 

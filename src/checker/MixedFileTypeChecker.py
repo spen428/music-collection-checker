@@ -1,13 +1,13 @@
-from typing import Set
+from typing import Set, List
 
-from . import BaseChecker
+from . import BaseChecker, WalkItem
 
 
 class MixedFileTypeChecker(BaseChecker):
     file_extensions: Set[str] = set()
 
-    def __init__(self, work_dir: str):
-        super().__init__('Mixed file types', work_dir)
+    def __init__(self, work_dir: str, walk: List[WalkItem]):
+        super().__init__('Mixed file types', work_dir, walk)
 
     def _check(self, current_path: str, dirs: list, files: list, depth: int):
         if len(files) == 0:

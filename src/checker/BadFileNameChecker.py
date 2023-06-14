@@ -1,11 +1,12 @@
 import re
+from typing import List
 
-from . import BaseChecker
+from . import BaseChecker, WalkItem
 
 
 class BadFileNameChecker(BaseChecker):
-    def __init__(self, work_dir: str):
-        super().__init__('Bad file names', work_dir)
+    def __init__(self, work_dir: str, walk: List[WalkItem]):
+        super().__init__('Bad file names', work_dir, walk)
 
     track_regex = re.compile(r"^(\d{2}-)?\d{2}\. .+\.[a-z0-9]{3,4}$")
     cover_regex = re.compile(r"^cover\.(jpg|png)$")

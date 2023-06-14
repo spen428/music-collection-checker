@@ -33,13 +33,15 @@ def _check(checker: BaseChecker):
 def run_all_checks(work_dir: str, confirm_before_each: bool):
     print("Checking music collection for issues...")
 
+    walk = list(os.walk(work_dir))
+
     checkers: List[BaseChecker] = [
-        EmptyDirChecker(work_dir),
-        MissingCoverArtChecker(work_dir),
-        BadDirNameChecker(work_dir),
-        UndesirableFileTypeChecker(work_dir),
-        MixedFileTypeChecker(work_dir),
-        BadFileNameChecker(work_dir),
+        EmptyDirChecker(work_dir, walk),
+        MissingCoverArtChecker(work_dir, walk),
+        BadDirNameChecker(work_dir, walk),
+        UndesirableFileTypeChecker(work_dir, walk),
+        MixedFileTypeChecker(work_dir, walk),
+        BadFileNameChecker(work_dir, walk),
     ]
 
     for checker in checkers:

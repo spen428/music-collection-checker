@@ -1,9 +1,11 @@
-from . import BaseChecker
+from typing import List
+
+from . import BaseChecker, WalkItem
 
 
 class MissingMetadataChecker(BaseChecker):
-    def __init__(self, work_dir: str):
-        super().__init__('Missing metadata', work_dir)
+    def __init__(self, work_dir: str, walk: List[WalkItem]):
+        super().__init__('Missing metadata', work_dir, walk)
 
     required_tags = [
         "MusicBrainz Release Id",
