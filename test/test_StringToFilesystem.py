@@ -62,3 +62,7 @@ res/os_walk_test/.config/evolution/mail/folders/
 res/os_walk_test/.emacs
 """
         self.assertEqual(self.expected, string_to_filesystem(string, 'res/os_walk_test'))
+
+    def test_string_to_filesystem_root_dir_equals_string(self):
+        expected = [('/mnt/music', [], [])]
+        self.assertEqual(expected, string_to_filesystem('/mnt/music/', '/mnt/music/'))
