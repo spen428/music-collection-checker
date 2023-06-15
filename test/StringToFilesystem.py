@@ -1,4 +1,4 @@
-from typing import Iterator, List, Dict
+from typing import Iterator, List, Dict, Tuple
 
 from checker import WalkItem
 
@@ -8,16 +8,8 @@ def string_to_walk_iterator(string: str) -> Iterator[WalkItem]:
 
 
 def string_to_filesystem(string: str) -> List[WalkItem]:
-    exploded_filepaths = [x.rsplit('/', 2) for x in sorted(string.strip().splitlines())]
     tree: Dict[str, Dict[str, List[str]]] = dict()
-    for filepath_segments in exploded_filepaths:
-        root = filepath_segments[0]
-        middle = filepath_segments[1]
-
-        if len(filepath_segments) == 2 and middle == '':
-            continue
-
-        leaf = filepath_segments[2]
+    for root, middle, leaf in _explode_filepaths(string):
         if leaf == '':
             tree.setdefault(root, {})
             tree[root].setdefault('dirs', [])
@@ -27,10 +19,21 @@ def string_to_filesystem(string: str) -> List[WalkItem]:
         tree.setdefault(subdir, {})
         tree[subdir].setdefault('files', [])
         tree[subdir].setdefault('dirs', [])
+
         if leaf != '':
             tree[subdir]['files'].append(leaf)
 
     return _tree_to_list(tree)
+
+
+def _explode_filepaths(string: str) -> List[Tuple[str, str, str]]:
+    exploded = []
+    for file_path in sorted(string.strip().splitlines()):
+        rs = file_path.rsplit('/', 2)
+        if len(rs) == 3:
+            as_tuple = (rs[0], rs[1], rs[2])
+            exploded.append(as_tuple)
+    return exploded
 
 
 def _tree_to_list(tree_dict) -> List[WalkItem]:
