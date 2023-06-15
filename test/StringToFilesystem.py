@@ -33,16 +33,22 @@ def string_to_filesystem(string: str, root_dir: str) -> List[WalkItem]:
     """
     root_dir = ensure_single_trailing_slash(root_dir)
     tree: Dict[str, Dict[str, List[str]]] = dict()
+
     for root, middle, leaf in _explode_filepaths(string, root_dir):
-        if leaf == '':
-            _make_subtree(root, tree)
+        _make_subtree(root, tree)
+        _make_subtree(f'{root}/{middle}', tree)
+
+    for root, middle, leaf in _explode_filepaths(string, root_dir):
+        leaf_is_directory = (leaf == '')
+        if leaf_is_directory:
             tree[root]['dirs'].append(middle)
+        else:
+            tree[f'{root}/{middle}']['files'].append(leaf)
 
-        subdir = f'{root}/{middle}'
-        _make_subtree(subdir, tree)
-
-        if leaf != '':
-            tree[subdir]['files'].append(leaf)
+    keys = list(tree.keys())
+    for root in keys:
+        if not root.startswith(root_dir[:-1]):
+            del tree[root]
 
     return _tree_to_list(tree)
 

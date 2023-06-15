@@ -68,5 +68,5 @@ res/os_walk_test/.emacs
         self.assertEqual(expected, string_to_filesystem('/mnt/music/', '/mnt/music/'))
 
     def test_string_to_filesystem_single_empty_subdir(self):
-        expected = [('/mnt/music', ['sub_dir'], [])]
+        expected = [('/mnt/music', ['sub_dir'], []), ('/mnt/music/sub_dir', [], [])]
         self.assertEqual(expected, string_to_filesystem('/mnt/music/sub_dir/', '/mnt/music/'))
