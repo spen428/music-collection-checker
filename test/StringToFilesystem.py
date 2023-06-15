@@ -1,29 +1,51 @@
-from typing import Iterator, List, Dict, Tuple
+import os
+from typing import List, Dict, Tuple
 
 from checker import WalkItem
 
 
-def string_to_walk_iterator(string: str) -> Iterator[WalkItem]:
-    return iter(string_to_filesystem(string))
-
-
 def string_to_filesystem(string: str) -> List[WalkItem]:
+    """
+    Transform a textual representation of a directory structure into a list of tuples, emulating what ``os.walk()``
+    would return. Directories **must** end with a slash, else they will be treated as files.
+
+    |
+    | **Example input:**
+    |
+    | ``root/``
+    | ``root/file.txt``
+    | ``root/subdir/``
+    | ``root/subdir/emptydir/``
+    | ``root/subdir/file.txt``
+    |
+    | **Example output:**
+    |
+    | ``[ ( 'root', [ 'subdir' ], [ 'file.txt' ] ), ( 'root/subdir', [ 'emptydir' ], [ 'file.txt' ] ) ]``
+
+    .. seealso:: `os.walk() <https://docs.python.org/3/library/os.html#os.walk>`_
+
+    :param string: a textual representation of a filesystem
+    :return: a list of 3-tuples of the form (dirpath, dirnames, filenames)
+    """
     tree: Dict[str, Dict[str, List[str]]] = dict()
     for root, middle, leaf in _explode_filepaths(string):
         if leaf == '':
-            tree.setdefault(root, {})
-            tree[root].setdefault('dirs', [])
+            _make_subtree(root, tree)
             tree[root]['dirs'].append(middle)
 
         subdir = f'{root}/{middle}'
-        tree.setdefault(subdir, {})
-        tree[subdir].setdefault('files', [])
-        tree[subdir].setdefault('dirs', [])
+        _make_subtree(subdir, tree)
 
         if leaf != '':
             tree[subdir]['files'].append(leaf)
 
     return _tree_to_list(tree)
+
+
+def _make_subtree(root, tree):
+    tree.setdefault(root, {})
+    tree[root].setdefault('files', [])
+    tree[root].setdefault('dirs', [])
 
 
 def _explode_filepaths(string: str) -> List[Tuple[str, str, str]]:
