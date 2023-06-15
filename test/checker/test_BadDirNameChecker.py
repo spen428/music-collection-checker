@@ -32,8 +32,12 @@ class TestBadDirNameChecker(TestCase):
     def test__check_with_min_depth_parameter(self):
         filesystem = '''
 /mnt/music/Unsorted/
+/mnt/music/Metal/
 /mnt/music/Metal/Unsorted/
+/mnt/music/Metal/[1999-01-01] Album Title/
 /mnt/music/Metal/[1999-01-01] Album Title/Track 1.ogg
+/mnt/music/Metal/Heavy/
+/mnt/music/Metal/Heavy/[1999-01-01] Album Title/
 /mnt/music/Metal/Heavy/[1999-01-01] Album Title/Track 1.ogg
         '''
         to_filesystem = string_to_filesystem(filesystem)
