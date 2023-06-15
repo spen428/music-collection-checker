@@ -48,7 +48,7 @@ res/os_walk_test/.config/evolution/mail/state.ini
 res/os_walk_test/.config/evolution/mail/folders/
 res/os_walk_test/.emacs
 """
-        self.assertEqual(self.expected, string_to_filesystem(string))
+        self.assertEqual(self.expected, string_to_filesystem(string, 'res/os_walk_test'))
 
     def test_string_to_filesystem_omitting_intermediate_dirs(self):
         string = """
@@ -61,4 +61,4 @@ res/os_walk_test/.config/evolution/mail/state.ini
 res/os_walk_test/.config/evolution/mail/folders/
 res/os_walk_test/.emacs
 """
-        self.assertEqual(self.expected, string_to_filesystem(string))
+        self.assertEqual(self.expected, string_to_filesystem(string, 'res/os_walk_test'))
