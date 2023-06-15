@@ -1,4 +1,3 @@
-from pprint import pprint
 from unittest import TestCase
 
 from parameterized import parameterized
@@ -20,7 +19,7 @@ class TestBadDirNameChecker(TestCase):
         ('[2002-02-02]', False),
     ])
     def test__check_basic_valid_and_invalid_dir_names(self, dirname: str, is_valid: bool):
-        sut = BadDirNameChecker('/mnt/music/Metal', string_to_filesystem(f'/mnt/music/Metal/{dirname}/Track 1.ogg'))
+        sut = BadDirNameChecker('/mnt/music/Metal', string_to_filesystem(f'/mnt/music/Metal/{dirname}/Track 1.ogg', ''))
         sut.check()
 
         issues = [x for x in sut.issues()]
@@ -36,8 +35,7 @@ class TestBadDirNameChecker(TestCase):
 /mnt/music/Metal/[1999-01-01] Album Title/Track 1.ogg
 /mnt/music/Metal/Heavy/[1999-01-01] Album Title/Track 1.ogg
         '''
-        to_filesystem = string_to_filesystem(filesystem)
-        pprint(to_filesystem)
+        to_filesystem = string_to_filesystem(filesystem, '')
         sut = BadDirNameChecker('/mnt/music', to_filesystem, ignore_dirs_with_depth_less_than=3)
         sut.check()
 

@@ -39,7 +39,7 @@ class TestBaseChecker(TestCase):
 
     def test__pre_post_check_hooks_run_in_order(self):
         stack = []
-        sut = BaseChecker('', '', string_to_filesystem('/mnt/music'))
+        sut = BaseChecker('', '', string_to_filesystem('/mnt/music/', '/mnt/music'))
         sut._pre_check = lambda *args: stack.append("pre_check")
         sut._check = lambda *args: stack.append("check")
         sut._post_check = lambda *args: stack.append("post_check")
