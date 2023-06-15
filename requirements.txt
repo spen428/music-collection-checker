@@ -1,2 +1,2 @@
 mutagen==1.46.0
-parameterized~=0.9.0
+parameterized==0.9.0
