@@ -1,6 +1,8 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Set, Iterable
 
 from checker import WalkItem
+
+MyTree = Dict[str, Dict[str, List[str]]]
 
 
 def ensure_single_trailing_slash(s: str):
@@ -32,31 +34,35 @@ def string_to_filesystem(string: str, root_dir: str) -> List[WalkItem]:
     :return: a list of 3-tuples of the form (dirpath, dirnames, filenames)
     """
     root_dir = ensure_single_trailing_slash(root_dir)
-    tree: Dict[str, Dict[str, List[str]]] = dict()
+    file_paths = _explode_filepaths(string, root_dir)
 
-    for root, middle, leaf in _explode_filepaths(string, root_dir):
-        _make_subtree(root, tree)
-        _make_subtree(f'{root}/{middle}', tree)
+    tree = _create_empty_tree(file_paths)
 
-    for root, middle, leaf in _explode_filepaths(string, root_dir):
+    for root, middle, leaf in file_paths:
         leaf_is_directory = (leaf == '')
         if leaf_is_directory:
             tree[root]['dirs'].append(middle)
         else:
             tree[f'{root}/{middle}']['files'].append(leaf)
 
-    keys = list(tree.keys())
-    for root in keys:
-        if not root.startswith(root_dir[:-1]):
-            del tree[root]
+    _remove_items_above_root_dir(root_dir, tree)
 
     return _tree_to_list(tree)
 
 
-def _make_subtree(root, tree):
-    tree.setdefault(root, {})
-    tree[root].setdefault('files', [])
-    tree[root].setdefault('dirs', [])
+def _create_empty_tree(exploded: List[Tuple[str, str, str]]) -> MyTree:
+    tree: MyTree = dict()
+    for root, middle, leaf in exploded:
+        _make_subtrees(root, tree)
+        _make_subtrees(f'{root}/{middle}', tree)
+    return tree
+
+
+def _remove_items_above_root_dir(root_dir: str, tree: MyTree):
+    keys = list(tree.keys())
+    for root in keys:
+        if not root.startswith(root_dir[:-1]):
+            del tree[root]
 
 
 def _explode_filepaths(string: str, root_dir: str) -> List[Tuple[str, str, str]]:
@@ -73,8 +79,14 @@ def _explode_filepaths(string: str, root_dir: str) -> List[Tuple[str, str, str]]
     return exploded
 
 
-def _get_intermediate_dirs(lines: List[str], root_dir: str) -> List[str]:
-    intermediate_dirs = []
+def _make_subtrees(root: str, tree: MyTree):
+    tree.setdefault(root, {})
+    tree[root].setdefault('files', [])
+    tree[root].setdefault('dirs', [])
+
+
+def _get_intermediate_dirs(lines: Iterable[str], root_dir: str) -> Set[str]:
+    intermediate_dirs = set()
     for line in lines:
         index = 0
         while True:
@@ -85,15 +97,15 @@ def _get_intermediate_dirs(lines: List[str], root_dir: str) -> List[str]:
             if substr == root_dir:
                 continue
             if substr.startswith(root_dir):
-                intermediate_dirs.append(substr)
+                intermediate_dirs.add(substr)
     return intermediate_dirs
 
 
-def _tree_to_list(tree_dict) -> List[WalkItem]:
+def _tree_to_list(tree: MyTree) -> List[WalkItem]:
     nodes = []
-    for key in tree_dict:
-        files = sorted(tree_dict[key].get("files", []))
-        dirs = sorted(tree_dict[key]["dirs"])
+    for key in tree:
+        files = sorted(tree[key].get("files", []))
+        dirs = sorted(tree[key]["dirs"])
         node = (key, dirs, files)
         nodes.append(node)
     return nodes
