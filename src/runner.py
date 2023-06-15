@@ -38,7 +38,7 @@ def run_all_checks(work_dir: str, confirm_before_each: bool):
     checkers: List[BaseChecker] = [
         EmptyDirChecker(work_dir, walk),
         MissingCoverArtChecker(work_dir, walk),
-        BadDirNameChecker(work_dir, walk),
+        BadDirNameChecker(work_dir, walk, ignore_dirs_with_depth_less_than=3),
         UndesirableFileTypeChecker(work_dir, walk),
         MixedFileTypeChecker(work_dir, walk),
         BadFileNameChecker(work_dir, walk),
